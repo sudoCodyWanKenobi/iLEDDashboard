@@ -196,7 +196,7 @@
       stockTable.innerHTML += `
         <tr>
           <td>${item}</td>
-          <td>${quantity}</td>
+          <td>${quantity || 0}</td>
           <td class="${statusClass}">${status}</td>
 	  <td>${eta || ''}</td>
         </tr>
