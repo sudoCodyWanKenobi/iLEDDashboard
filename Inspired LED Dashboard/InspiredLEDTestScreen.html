@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inspired LED</title>
+ 
+  <style>
+	
+	.rainbow-glow-text {
+		font-weight: bold;
+		text-align: center;
+		font-size: 1.2rem;
+		animation: rainbow 5s linear infinite;
+	}
+
+
+
+	@keyframes rainbow {
+		0% { color: red; }
+		14% { color: orange; }
+		28% { color: yellow; }
+		42% { color: green; }
+		57% { color: blue; }
+		71% { color: indigo; }
+		85% { color: violet; }
+		100% { color: red; }
+	}
+    .header {
+		position: relative;
+		background: #1c1c1c;
+		padding: 15px 30px;
+		border-bottom: 2px solid #444;
+		height: 80px;
+		}
+	.logo-container {
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		text-align: center;
+		filter: drop-shadow(0 0 8px white);
+		}
+
+	.logo {
+		height: 60px;
+		
+		}
+
+	.clock {
+		position: absolute;
+		right: 30px;
+		top: 50%;
+		transform: translateY(-50%);
+		font-size: 1.5rem;
+		font-weight: bold;
+		color: #fff486;
+		}
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background-color: #111;
+      color: #fff;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 20px;
+    }
+    .section {
+	  text-align: center;
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+      height: 90vh;
+      overflow-y: auto;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #555;
+      padding-bottom: 5px;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #fff;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #333;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      padding: 10px 0;
+      border-bottom: 1px solid #444;
+    }
+    a {
+      color: #4fc3f7;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Status color classes */
+    .status-ok {
+      color: #00e676;
+      font-weight: bold;
+    }
+    .status-low {
+      color: #ff9100;
+      font-weight: bold;
+    }
+    .status-out {
+      color: #ff5252;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+   <div class="logo-container">
+    <img src="Logo.png" alt="Company Logo" class="logo-centered" />
+   </div>
+    <div class="clock" id="clock"></div>
+  </div>
+  <div class="container">
+    <div class="section">
+      <h2>Stock Levels</h2>
+      <table>
+        <thead>
+          <tr><th>Item</th><th>Quantity</th><th>Status</th></tr>
+        </thead>
+        <tbody id="stock-table"></tbody>
+      </table>
+    </div>
+    <div class="section">
+      <h2>Announcements</h2>
+      <ul id="announcements-list"></ul>
+    </div>
+    <div class="section">
+      <h2>Product Docs</h2>
+      <ul id="docs-list"></ul>
+    </div>
+  </div>
+
+ <script>
+  const sheetID = "1kRJFHtIe3Bv4gL80PaTVmi_wbLx-2dYs4k-ud2SNoEM";
+  const sheets = {
+    Stock: 'Stock',
+    Announcements: 'Announcements',
+    ProductDocs: 'ProductDocs'
+  };
+
+  async function fetchSheetData(sheetName) {
+    const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${sheetName}&tqx=out:json`;
+    const res = await fetch(url);
+    const text = await res.text();
+    const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+    return json.table.rows.map(row => row.c.map(cell => cell?.v || ""));
+  }
+
+  async function showData() {
+    // Stock Data
+    const stockData = await fetchSheetData(sheets.Stock);
+    const stockTable = document.getElementById('stock-table');
+    stockTable.innerHTML = "";
+    stockData.forEach(row => {
+      const [item, quantity, status] = row;
+      let statusClass = '';
+      if (status.toLowerCase() === 'ok') statusClass = 'status-ok';
+      else if (status.toLowerCase() === 'low') statusClass = 'status-low';
+      else if (status.toLowerCase() === 'out of stock') statusClass = 'status-out';
+
+      stockTable.innerHTML += `
+        <tr>
+          <td>${item}</td>
+          <td>${quantity}</td>
+          <td class="${statusClass}">${status}</td>
+        </tr>
+      `;
+    });
+	
+	
+
+ // Announcements
+    const annData = await fetchSheetData(sheets.Announcements);
+    const annList = document.getElementById('announcements-list');
+    annList.innerHTML = "";
+    annData.forEach(([message]) => {
+      if (message) {
+		const isBirthday = message.toLowerCase().includes("happy birthday");
+		const className = isBirthday ? "rainbow-glow-text" : "";
+		const decoratedMessage = isBirthday
+			? `🎉🎂 ${message} 🎈🎁`
+			: message;
+		annList.innerHTML += `<li class="${className}">${decoratedMessage}</li>`;
+      }
+    });
+
+    // Product Docs
+    const docData = await fetchSheetData(sheets.ProductDocs);
+    const docsList = document.getElementById('docs-list');
+    docsList.innerHTML = "";
+    docData.forEach(([title, link]) => {
+      if (title && link) docsList.innerHTML += `<li><a href="${link}" target="_blank">${title}</a></li>`;
+    });
+  }
+
+  window.onload = showData;
+  setInterval(showData, 30000); // Refresh every 30 seconds
+  
+ 
+  
+   function updateClock() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const dateString = now.toLocaleDateString();
+    document.getElementById('clock').textContent = `${dateString} ${timeString}`;
+  }
+
+  setInterval(updateClock, 1000);
+  updateClock(); // initial call
+</script>
+</body>
+</html>
