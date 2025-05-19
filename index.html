@@ -206,12 +206,12 @@
       }
     });
 
-    // Product Docs
+    // Product Demo Days
     const docData = await fetchSheetData(sheets.ProductDemoDays);
     const docsList = document.getElementById('docs-list');
     docsList.innerHTML = "";
-    docData.forEach(([title, link]) => {
-      if (title && link) docsList.innerHTML += `<li><a href="${link}" target="_blank">${title}</a></li>`;
+    demoData.forEach(([message]) => {
+  if (message) {docsList.innerHTML += `<li>${message}</li>`;
     });
   }
 
