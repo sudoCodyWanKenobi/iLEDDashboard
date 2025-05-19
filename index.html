@@ -144,7 +144,7 @@
       <h2>Stock Levels</h2>
       <table>
         <thead>
-          <tr><th>Item</th><th>Quantity</th><th>Status</th></tr>
+          <tr><th>Item</th><th>Quantity</th><th>Status</th><th>ETA</th></th></tr>
         </thead>
         <tbody id="stock-table"></tbody>
       </table>
@@ -181,7 +181,7 @@
     const stockTable = document.getElementById('stock-table');
     stockTable.innerHTML = "";
     stockData.forEach(row => {
-      const [item, quantity, status] = row;
+      const [item, quantity, status, eta] = row;
       let statusClass = '';
       if (status.toLowerCase() === 'ok') statusClass = 'status-ok';
       else if (status.toLowerCase() === 'low') statusClass = 'status-low';
@@ -192,6 +192,7 @@
           <td>${item}</td>
           <td>${quantity}</td>
           <td class="${statusClass}">${status}</td>
+	  <td>${eta || ''}</td>
         </tr>
       `;
     });
