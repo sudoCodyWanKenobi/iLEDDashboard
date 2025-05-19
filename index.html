@@ -222,7 +222,7 @@
 
    // Product Demo Days
 const docData = await fetchSheetData(sheets.ProductDemoDays);
-const docsList = document.getElementById('docs-table');
+const docsTable = document.getElementById('docs-table');
 docsTable.innerHTML = "";
 docData.forEach(([topic, ledby, date]) => {
   if (topic && ledby && date) {
