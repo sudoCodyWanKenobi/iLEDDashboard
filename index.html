@@ -206,14 +206,15 @@
       }
     });
 
-    // Product Demo Days
-    const docData = await fetchSheetData(sheets.ProductDemoDays);
-    const docsList = document.getElementById('docs-list');
-    docsList.innerHTML = "";
-    demoData.forEach(([message]) => {
-  if (message) {docsList.innerHTML += `<li>${message}</li>`;
-    });
+   // Product Demo Days
+const docData = await fetchSheetData(sheets.ProductDemoDays);
+const docsList = document.getElementById('docs-list');
+docsList.innerHTML = "";
+docData.forEach(([message]) => {
+  if (message) {
+    docsList.innerHTML += `<li>${message}</li>`;
   }
+});
 
   window.onload = showData;
   setInterval(showData, 30000); // Refresh every 30 seconds
