@@ -207,7 +207,7 @@
     });
 
     // Product Docs
-    const docData = await fetchSheetData(sheets.ProductDocs);
+    const docData = await fetchSheetData(sheets.ProductDemoDays);
     const docsList = document.getElementById('docs-list');
     docsList.innerHTML = "";
     docData.forEach(([title, link]) => {
