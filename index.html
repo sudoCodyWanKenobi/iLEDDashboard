@@ -226,13 +226,13 @@ const docsList = document.getElementById('docs-table');
 docsTable.innerHTML = "";
 docData.forEach(([topic, ledby, date]) => {
   if (topic && ledby && date) {
-    docsTable.innerHTML += '
+    docsTable.innerHTML += `
 	    <tr>
 	    <td>${topic}</td>
 	    <td>${ledby}</td>
 	    <td>${date}</td>
 	    </tr>
-	  ';
+	  `;
   }
 });
   }
