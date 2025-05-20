@@ -6,8 +6,17 @@
  
   <style>
 
+	.glow-anniversary {
+		color: #046e18;
+		font-weight: bold;
+		text-shadow: 0 0 8px #046e18, 0 0 16px #046e18;
+	}
+	.glow-lunch {
+		color: #d64609;
+		font-weight: bold;
+		text-shadow: 0 0 8px #d64609, 0 0 16px #d64609;
 
-
+	{
 	  
 	.rainbow-glow-text {
 		font-weight: bold;
@@ -214,11 +223,20 @@
     annList.innerHTML = "";
     annData.forEach(([message]) => {
       if (message) {
-		const isBirthday = message.toLowerCase().includes("happy birthday");
-		const className = isBirthday ? "rainbow-glow-text" : "";
-		const decoratedMessage = isBirthday
-			? `🎉🎂 ${message} 🎈🎁`
-			: message;
+    const lower = message.toLowerCase();
+    let className = "";
+    let decoratedMessage = message;
+
+    if (lower.includes("happy birthday")) {
+      className = "rainbow-glow-text";
+      decoratedMessage = `🎉🎂 ${message} 🎈🎁`;
+    } else if (lower.includes("anniversary")) {
+      className = "glow-anniversary";
+      decoratedMessage = `🎊🎉 ${message} 🎉🎊`;
+    } else if (lower.includes("lunch")) {
+      className = "glow-lunch";
+      decoratedMessage = `🍕🥪 ${message} 🍔🌮`;
+    }
 		annList.innerHTML += `<li class="${className}">${decoratedMessage}</li>`;
       }
     });
