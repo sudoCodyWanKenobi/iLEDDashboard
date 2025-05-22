@@ -16,6 +16,14 @@
 		font-weight: bold;
 		text-shadow: 0 0 8px #d64609, 0 0 16px #d64609;
 	}
+	.holiday {
+		color: #FFC0CB;
+		font-weight: bold;
+	}
+	.people-out {
+		color: #ff5252;
+		font-weight: bold;
+	}
 		
 	
 	  
@@ -237,7 +245,12 @@
     } else if (lower.includes("lunch")) {
       className = "glow-lunch";
       decoratedMessage = `🍕🥪 ${message} 🍔🌮`;
+    } else if (lower.includes("holiday")) {
+      className = "holiday";
+    } else if (lower.includes("people out")) {
+      className = "people-out";
     }
+	      
 		annList.innerHTML += `<li class="${className}">${decoratedMessage}</li>`;
       }
     });
