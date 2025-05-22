@@ -204,7 +204,22 @@
 
   async function showData() {
     // Stock Data
-    const stockData = await fetchSheetData(sheets.Stock);
+    let stockData = await fetchSheetData(sheets.Stock);
+
+// Sort: 'Out of Stock' first, then 'Low', then 'OK'
+stockData.sort((a, b) => {
+  const getPriority = (status) => {
+    if (!status) return 3;
+    status = status.toLowerCase();
+    if (status === 'out of stock') return 0;
+    if (status === 'low') return 1;
+    if (status === 'ok') return 2;
+    return 3;
+  };
+
+  return getPriority(a[2]) - getPriority(b[2]);
+});
+
     const stockTable = document.getElementById('stock-table');
     stockTable.innerHTML = "";
     stockData.forEach(row => {
